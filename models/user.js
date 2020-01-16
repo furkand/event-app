@@ -12,8 +12,10 @@ const userSchema = new Schema({
      },
      createdEvents: [
          {
-             type: Schema.Types.ObjectId,
-             ref:'Event'
+            // This is not mean that we add objects to created events. We add multiple IDs
+             type: Schema.Types.ObjectId, 
+             // this is allows me to set up a relation 
+             ref:'Event' // model namfe 
 
         }
      ]

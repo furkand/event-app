@@ -5,7 +5,7 @@ const Booking = require('../../models/booking')
 
 //in this way i do not need to use mongoose populate method and i can send request as much as i want this give more flexibilty
 // take array of event ids and create from them array of event objects
-const events =  async eventIds => {
+const events =  async (eventIds) => {
     try {
         const events = await  Event.find({_id: { $in: eventIds}}) 
         return events.map( event =>{
@@ -25,6 +25,20 @@ const events =  async eventIds => {
     }
 
 }
+// this async fetchSingleEvent function will work exactly same principle with events function but it will fetch just one event
+    const fetchSingleEvent = async (eventId) =>{
+        try{
+            const event = await Event.findById(eventId);
+            return { 
+                ...event._doc, 
+                _id : event.id,
+                creator: user.bind(this, event.creator)
+            }
+        }catch(err){
+            throw err
+        }
+    }
+
     const user = async (userId) => {
         try{
             const user = await User.findById(userId)
@@ -63,6 +77,8 @@ module.exports = {
                 return { 
                     ...booking._doc, 
                     _id : booking.id, 
+                    user: user.bind(this, booking._doc.user),
+                    event: fetchSingleEvent.bind(this,booking._doc.event),
                     createdAt : new Date(booking._doc.createdAt).toISOString(),
                     updatedAt : new Date(booking._doc.updatedAt).toISOString() 
                 }
@@ -133,8 +149,23 @@ module.exports = {
         return {
             ...result._doc, 
             _id: result.id , 
+            user: user.bind(this, booking._doc.user),
+            event: fetchSingleEvent.bind(this,booking._doc.event),
             createdAt: new Date(result._doc.createdAt).toISOString(),
-            updatedAt: new Date(result._doc.createdAt).toISOStringb
+            updatedAt: new Date(result._doc.createdAt).toISOString()
         }
+    },
+    cancelBooking: async(id)=>{
+        try{
+            // I populated the event property of booking because i need rich data to return event
+            const booking = await Booking.findById(id.bookingId).populate('event')
+            const event = { ...booking.event._doc, 
+                _id: booking.event.id, 
+                creator: user.bind(this,booking.event.creator)
+            };
+            const cancelled = await Booking.deleteOne({_id: id.bookingId});
+            return event
+        }catch(err){throw err}
+
     }
 }

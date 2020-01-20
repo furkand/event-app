@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const Event = require('../../models/event')
 const User = require('../../models/user')
+const Booking = require('../../models/booking')
 
 //in this way i do not need to use mongoose populate method and i can send request as much as i want this give more flexibilty
 // take array of event ids and create from them array of event objects
@@ -55,6 +56,21 @@ module.exports = {
             throw new Error(`${err}`)
         }
     },
+    bookings: async () => {
+        try{
+            const bookings = await Booking.find();
+            return bookings.map( booking =>{
+                return { 
+                    ...booking._doc, 
+                    _id : booking.id, 
+                    createdAt : new Date(booking._doc.createdAt).toISOString(),
+                    updatedAt : new Date(booking._doc.updatedAt).toISOString() 
+                }
+            })
+        }catch(err){
+            throw err
+        }
+    },
     createEvent: async (eventInfos) => {  
         console.log('inf unction')
         const event = new Event({
@@ -106,5 +122,19 @@ module.exports = {
             throw new Error(err);
         }
          
+    },
+    bookEvent: async (id) => {
+        const bookedEvent = await Event.findOne({_id: id.eventId});
+        const booking = new Booking({
+            user: '5e20a1c7896d900c6e5427dc',
+            event: bookedEvent
+        })
+        const result = await booking.save();
+        return {
+            ...result._doc, 
+            _id: result.id , 
+            createdAt: new Date(result._doc.createdAt).toISOString(),
+            updatedAt: new Date(result._doc.createdAt).toISOStringb
+        }
     }
 }

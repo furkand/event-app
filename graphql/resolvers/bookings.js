@@ -7,6 +7,9 @@ const {bookingTransformer, eventTransformer} = require('./helpers')
 module.exports = {
 
     bookings: async () => {
+        if(!req.isAuth){
+            throw new Error("Unauthenticated!")
+        }
         try{
             const bookings = await Booking.find();
             return bookings.map( booking =>{
@@ -16,16 +19,22 @@ module.exports = {
             throw err
         }
     },
-    bookEvent: async (id) => {
+    bookEvent: async (id,req) => {
+        if(!req.isAuth){
+            throw new Error("Unauthenticated!")
+        }
         const bookedEvent = await Event.findOne({_id: id.eventId});
         const booking = new Booking({
-            user: '5e25ce18b944665aaa82b62b',
+            user: req.userId,
             event: bookedEvent
         })
         const result = await booking.save();
         return bookingTransformer(result);  
     },
-    cancelBooking: async(id)=>{
+    cancelBooking: async(id,req)=>{
+        if(!req.isAuth){
+            throw new Error("Unauthenticated!")
+        }
         try{
             // I populated the event property of booking because i need rich data to return event
             const booking = await Booking.findById(id.bookingId).populate('event')

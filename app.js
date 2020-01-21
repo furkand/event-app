@@ -8,6 +8,7 @@ const isAuth = require("./middleware/auth")
 
 const app = express()
 
+const PORT = process.env.PORT  || 5000
 
 app.use(bodyParser.json())
 app.use(isAuth)
@@ -23,8 +24,8 @@ mongoose.connect(`mongodb+srv://furkandemirturk:f4xu76NmhPQrVY6p@cluster0-zezow.
 
 .then(()=>{
     console.log("Database connected to server")
-    app.listen(3000)  
-    console.log("App is listening on 3000")  
+    app.listen(PORT)  
+    console.log("App is listening on " + res.url)  
 })
 .catch(err=>{
     console.log(err)

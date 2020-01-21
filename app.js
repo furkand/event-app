@@ -19,7 +19,7 @@ app.use('/grapghql', graphqlHttp({
 );
 
 
-mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-zezow.mongodb.net/event-app?retryWrites=true&w=majority` , { useNewUrlParser: true })
+mongoose.connect(`mongodb+srv://furkandemirturk:f4xu76NmhPQrVY6p@cluster0-zezow.mongodb.net/event-app?retryWrites=true&w=majority` , { useNewUrlParser: true })
 
 .then(()=>{
     console.log("Database connected to server")

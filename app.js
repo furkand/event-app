@@ -25,7 +25,7 @@ mongoose.connect(`mongodb+srv://furkandemirturk:f4xu76NmhPQrVY6p@cluster0-zezow.
 .then(()=>{
     console.log("Database connected to server")
     app.listen(PORT)  
-    console.log("App is listening on " + res.url)  
+    console.log("App is listening on " + PORT)  
 })
 .catch(err=>{
     console.log(err)

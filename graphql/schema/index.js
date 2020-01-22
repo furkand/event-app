@@ -19,6 +19,7 @@ type Event {
     creator: User!
 }
 type User {
+    token: String!
     _id : ID!
     email: String!
     password: String

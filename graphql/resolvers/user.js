@@ -10,16 +10,15 @@ module.exports = {
                 throw new Error('this email is already taken')
             }
             const hashedPassword = await bcrypt.hash(userInfos.userInput.password,12)
-            const token = await jwt.sign({userId: user.id, email: user.email}, "supersecretkeyisavailableingithubpublicly", 
-            {expiresIn: '1h'})
             const userSchema = new User({
-                token: token,
                 email: userInfos.userInput.email,
                 password : hashedPassword
             })
             const result = await userSchema.save();
+            const token = await jwt.sign({userId: result.id, email: result.email}, "supersecretkeyisavailableingithubpublicly", 
+            {expiresIn: '1h'})
             return { 
-                ...result._doc ,password: null, _id: result.id
+                ...result._doc ,password: null, _id: result.id,token:token
             }
         }
         catch (err){

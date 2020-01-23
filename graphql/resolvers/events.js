@@ -1,5 +1,5 @@
 const Event = require("../../models/event");
-const {eventTransformer,user} =  require("./helpers");
+const {eventTransformer,user} =  require("../../helpers/helpers");
 const User = require("../../models/user");
 
 

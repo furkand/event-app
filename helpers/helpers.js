@@ -1,7 +1,7 @@
 
-const Event = require('../../models/event')
-const User = require('../../models/user')
-const {dateTransformer} = require("../../helpers/date")
+const Event = require('../models/event')
+const User = require('../models/user')
+const {dateTransformer} = require("./date")
 
 const user = async (userId) => {
     try{

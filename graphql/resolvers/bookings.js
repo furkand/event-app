@@ -6,7 +6,7 @@ const {bookingTransformer, eventTransformer} = require('../../helpers')
 
 module.exports = {
 
-    bookings: async () => {
+    bookings: async (req) => {
         if(!req.isAuth){
             throw new Error("Unauthenticated!")
         }
